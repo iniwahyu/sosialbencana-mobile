@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.wmc.fragment.HomeFragment;
 import com.example.wmc.fragment.ProfilFragment;
+import com.example.wmc.fragment.UploadFragment;
 
 public class BottomMenu extends AppCompatActivity {
 
@@ -24,6 +25,11 @@ public class BottomMenu extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     fragment = new HomeFragment();
+                    getSupportFragmentManager().beginTransaction().
+                            replace(R.id.containerFragment, fragment, fragment.getClass().getSimpleName()).commit();
+                    return true;
+                case R.id.navigation_upload:
+                    fragment = new UploadFragment();
                     getSupportFragmentManager().beginTransaction().
                             replace(R.id.containerFragment, fragment, fragment.getClass().getSimpleName()).commit();
                     return true;
