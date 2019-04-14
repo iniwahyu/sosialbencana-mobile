@@ -11,31 +11,34 @@ import android.widget.TextView;
 
 import com.example.wmc.recycleritem.HomeItem;
 import com.example.wmc.R;
+import com.example.wmc.recycleritem.ProfilItem;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
+public class ProfilAdapter extends RecyclerView.Adapter<ProfilAdapter.ViewHolder> {
 
-    private List<HomeItem> listItems;
+    private List<ProfilItem> listItems;
     private Context context;
 
-    public UserAdapter(List<HomeItem> listItems, Context context) {
+    public ProfilAdapter(List<ProfilItem> listItems, Context context) {
         this.listItems = listItems;
         this.context = context;
     }
 
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_profil, viewGroup, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final HomeItem listItem = listItems.get(position);
-        holder.postUsername.setText(listItem.getUsername());
+        final ProfilItem listItem = listItems.get(position);
         holder.postLokasi.setText(listItem.getLokasi());
         Picasso.get().load(listItem.getGambar()).into(holder.postGambar);
         holder.postCaption.setText(listItem.getCaption());
@@ -63,7 +66,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView postUsername;
+        // PROFIL BAWAH
         public TextView postLokasi;
         public ImageView postGambar;
         public TextView postCaption;
@@ -71,7 +74,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            postUsername = (TextView)itemView.findViewById(R.id.postUsername);
             postLokasi = (TextView)itemView.findViewById(R.id.postLokasi);
             postGambar = (ImageView)itemView.findViewById(R.id.postGambar);
             postCaption = (TextView)itemView.findViewById(R.id.postCaption);

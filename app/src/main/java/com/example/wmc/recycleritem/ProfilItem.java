@@ -1,6 +1,6 @@
-package com.example.wmc;
+package com.example.wmc.recycleritem;
 
-public class ListItem {
+public class ProfilItem {
 
     private String idpost;
     private String username;
@@ -9,7 +9,7 @@ public class ListItem {
     private String caption;
     private String tanggal;
 
-    public ListItem(String idpost, String username, String lokasi, String gambar, String caption, String tanggal) {
+    public ProfilItem(String idpost, String username, String lokasi, String gambar, String caption, String tanggal) {
         this.idpost = idpost;
         this.username = username;
         this.lokasi = lokasi;

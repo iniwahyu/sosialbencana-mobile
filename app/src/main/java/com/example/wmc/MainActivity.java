@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wmc.adapter.UserAdapter;
+import com.example.wmc.recycleritem.HomeItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
 
-    private List<ListItem> listItems;
+    private List<HomeItem> listItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject data = array.getJSONObject(i);
-                        ListItem item = new ListItem(
+                        HomeItem item = new HomeItem(
                                 data.getString("id_post"),
                                 data.getString("username"),
                                 data.getString("lokasi"),

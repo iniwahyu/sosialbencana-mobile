@@ -17,7 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.wmc.ListItem;
+import com.example.wmc.recycleritem.HomeItem;
 import com.example.wmc.R;
 import com.example.wmc.adapter.UserAdapter;
 
@@ -39,7 +39,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
 
-    private List<ListItem> listItems;
+    private List<HomeItem> listItems;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment {
 
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject data = array.getJSONObject(i);
-                        ListItem item = new ListItem(
+                        HomeItem item = new HomeItem(
                                 data.getString("id_post"),
                                 data.getString("username"),
                                 data.getString("lokasi"),
