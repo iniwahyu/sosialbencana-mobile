@@ -13,10 +13,10 @@
         android:padding="10dp">
 
         <Button
+            android:id="@+id/buttonSelect"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Select Image"
-            android:id="@+id/buttonSelect"
             android:background="@color/md_green_600"
             android:layout_margin="10dp"/>
 
@@ -32,7 +32,7 @@
             android:text="Lokasi" />
 
         <EditText
-            android:id="@+id/inputKode"
+            android:id="@+id/inputLokasi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -47,7 +47,7 @@
             android:text="Deskripsi" />
 
         <EditText
-            android:id="@+id/postDeskripsi"
+            android:id="@+id/inputCaption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

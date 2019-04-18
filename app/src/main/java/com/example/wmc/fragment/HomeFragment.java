@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.android.volley.VolleyLog.TAG;
 
 
 /**
@@ -90,7 +93,8 @@ public class HomeFragment extends Fragment {
                     recyclerView.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Error while reading marker from response", e);
                 }
             }
         }, new Response.ErrorListener() {
