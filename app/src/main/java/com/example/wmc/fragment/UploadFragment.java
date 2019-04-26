@@ -3,9 +3,16 @@ package com.example.wmc.fragment;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,15 +24,20 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wmc.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -39,63 +51,56 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import static android.support.v4.content.ContextCompat.getSystemService;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UploadFragment extends Fragment {
-
+public class UploadFragment extends Fragment implements LocationListener {
 
     Button GetImageFromGalleryButton, UploadImageOnServerButton;
-
     ImageView ShowSelectedImage;
-
     // EDIT TEXT
     EditText inputLokasi;
     EditText inputCaption;
-
     // APALAH
     String GetLokasi;
     String GetCaption;
-
     Bitmap FixBitmap;
+    ProgressDialog progressDialog;
+    ByteArrayOutputStream byteArrayOutputStream;
+    byte[] byteArray;
+    String ConvertImage;
+    HttpURLConnection httpURLConnection;
+    URL url;
+    OutputStream outputStream;
+    BufferedWriter bufferedWriter;
+    int RC;
+    BufferedReader bufferedReader;
+    StringBuilder stringBuilder;
+    boolean check = true;
+    private int GALLERY = 1, CAMERA = 2;
+    private ContentResolver contentResolver;
 
     // INPUT POST NAME DI PHP
     String lokasi = "lokasi";
     String caption = "caption";
-    String ImageTag = "image_tag" ;
-    String ImageName = "image_data" ;
+    String ImageTag = "image_tag";
+    String ImageName = "image_data";
 
-    ProgressDialog progressDialog ;
+    // COBA
+    private Button btnLokasi;
+    private TextView txtLokasi;
 
-    ByteArrayOutputStream byteArrayOutputStream ;
+    LocationManager locationManager;
 
-    byte[] byteArray ;
-
-    String ConvertImage ;
-
-    HttpURLConnection httpURLConnection ;
-
-    URL url;
-
-    OutputStream outputStream;
-
-    BufferedWriter bufferedWriter ;
-
-    int RC ;
-
-    BufferedReader bufferedReader ;
-
-    StringBuilder stringBuilder;
-
-    boolean check = true;
-
-    private int GALLERY = 1, CAMERA = 2;
-    private ContentResolver contentResolver;
 
     public UploadFragment() {
         // Required empty public constructor
@@ -105,14 +110,15 @@ public class UploadFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        takePhotoFromCamera();
         View view = inflater.inflate(R.layout.fragment_upload, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
-        GetImageFromGalleryButton = (Button) view.findViewById(R.id.buttonSelect);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        btnLokasi = (Button)view.findViewById(R.id.buttonLokasi);
+        txtLokasi = (TextView)view.findViewById(R.id.inputLokasi);
         UploadImageOnServerButton = (Button) view.findViewById(R.id.buttonUpload);
 
         ShowSelectedImage = (ImageView) view.findViewById(R.id.imageView);
@@ -122,12 +128,12 @@ public class UploadFragment extends Fragment {
 
         byteArrayOutputStream = new ByteArrayOutputStream();
 
-        GetImageFromGalleryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPictureDialog();
-            }
-        });
+//        GetImageFromGalleryButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                takePhotoFromCamera();
+//            }
+//        });
 
         UploadImageOnServerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,38 +145,30 @@ public class UploadFragment extends Fragment {
             }
         });
 
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.CAMERA},
-                        5);
-            }
-        }
-    }
+//        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                requestPermissions(new String[]{Manifest.permission.CAMERA},5);
+//                //checkPermission();
+//                ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+//            }
+//        }
 
-    private void showPictureDialog(){
-        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(getContext());
-        pictureDialog.setTitle("Select Action");
-        String[] pictureDialogItems = {
-                "Photo Gallery",
-                "Camera" };
-        pictureDialog.setItems(pictureDialogItems, new DialogInterface.OnClickListener() {
+        btnLokasi.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        choosePhotoFromGallary();
-                        break;
-                    case 1:
-                        takePhotoFromCamera();
-                        break;
-                }
+            public void onClick(View v) {
+                getLocation();
             }
         });
-        pictureDialog.show();
     }
-    public void choosePhotoFromGallary() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, GALLERY);
+    
+    public void getLocation() {
+        try {
+            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
+        }
+        catch(SecurityException e) {
+            e.printStackTrace();
+        }
     }
 
     private void takePhotoFromCamera() {
@@ -182,22 +180,7 @@ public class UploadFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY) {
-            if (data != null) {
-                Uri contentURI = data.getData();
-                try {
-                    FixBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-                    // String path = saveImage(bitmap);
-                    //Toast.makeText(MainActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
-                    ShowSelectedImage.setImageBitmap(FixBitmap);
-                    UploadImageOnServerButton.setVisibility(View.VISIBLE);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        } else if (requestCode == CAMERA) {
+        if (requestCode == CAMERA) {
             FixBitmap = (Bitmap) data.getExtras().get("data");
             ShowSelectedImage.setImageBitmap(FixBitmap);
             UploadImageOnServerButton.setVisibility(View.VISIBLE);
@@ -251,6 +234,37 @@ public class UploadFragment extends Fragment {
 
     public ContentResolver getContentResolver() {
         return contentResolver;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        inputLokasi.setText("Latitude: " + location.getLatitude() + "\n Longitude: " + location.getLongitude());
+
+        try {
+            Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            inputLokasi.setText(inputLokasi.getText().toString() + "\n"+addresses.get(0).getAddressLine(0)+", "+
+                    addresses.get(0).getAddressLine(1)+", "+addresses.get(0).getAddressLine(2));
+        }catch(Exception e)
+        {
+
+        }
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        Toast.makeText(getContext(), "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
     }
 
     public class ImageProcessClass{

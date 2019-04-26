@@ -13,7 +13,7 @@
         android:padding="10dp">
 
         <Button
-            android:id="@+id/buttonSelect"
+            android:id="@+id/buttonLokasi"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Select Image"
