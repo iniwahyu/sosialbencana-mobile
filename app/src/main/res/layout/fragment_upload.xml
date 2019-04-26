@@ -16,7 +16,7 @@
             android:id="@+id/buttonLokasi"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Select Image"
+            android:text="GET LOCATION"
             android:background="@color/md_green_600"
             android:layout_margin="10dp"/>
 
@@ -37,8 +37,24 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textAutoComplete"
+            android:inputType="none"
             android:hint="Lokasi" />
+
+        <EditText
+            android:id="@+id/inputLatitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="none"
+            android:hint="Latitude" />
+
+        <EditText
+            android:id="@+id/inputLongitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="none"
+            android:hint="Longitude" />
 
         <TextView
             android:layout_width="match_parent"

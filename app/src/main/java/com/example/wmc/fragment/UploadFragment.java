@@ -68,11 +68,12 @@ public class UploadFragment extends Fragment implements LocationListener {
     Button GetImageFromGalleryButton, UploadImageOnServerButton;
     ImageView ShowSelectedImage;
     // EDIT TEXT
-    EditText inputLokasi;
     EditText inputCaption;
     // APALAH
     String GetLokasi;
     String GetCaption;
+    String GetLatitude;
+    String GetLongitude;
     Bitmap FixBitmap;
     ProgressDialog progressDialog;
     ByteArrayOutputStream byteArrayOutputStream;
@@ -91,13 +92,15 @@ public class UploadFragment extends Fragment implements LocationListener {
 
     // INPUT POST NAME DI PHP
     String lokasi = "lokasi";
+    String latitude = "latitude";
+    String longitude = "longitude";
     String caption = "caption";
     String ImageTag = "image_tag";
     String ImageName = "image_data";
 
     // COBA
     private Button btnLokasi;
-    private TextView txtLokasi;
+    private EditText inputLokasi, inputLatitude, inputLongitude;
 
     LocationManager locationManager;
 
@@ -118,7 +121,12 @@ public class UploadFragment extends Fragment implements LocationListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         btnLokasi = (Button)view.findViewById(R.id.buttonLokasi);
-        txtLokasi = (TextView)view.findViewById(R.id.inputLokasi);
+        inputLokasi = (EditText) view.findViewById(R.id.inputLokasi);
+        inputLokasi.setEnabled(false);
+        inputLatitude = (EditText) view.findViewById(R.id.inputLatitude);
+        inputLatitude.setEnabled(false);
+        inputLongitude = (EditText) view.findViewById(R.id.inputLongitude);
+        inputLongitude.setEnabled(false);
         UploadImageOnServerButton = (Button) view.findViewById(R.id.buttonUpload);
 
         ShowSelectedImage = (ImageView) view.findViewById(R.id.imageView);
@@ -128,43 +136,31 @@ public class UploadFragment extends Fragment implements LocationListener {
 
         byteArrayOutputStream = new ByteArrayOutputStream();
 
-//        GetImageFromGalleryButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                takePhotoFromCamera();
-//            }
-//        });
-
         UploadImageOnServerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 GetLokasi = inputLokasi.getText().toString();
+                GetLatitude = inputLatitude.getText().toString();
+                GetLongitude = inputLongitude.getText().toString();
                 GetCaption = inputCaption.getText().toString();
 
                 UploadImageToServer();
             }
         });
+        getLocation();
 
-//        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                requestPermissions(new String[]{Manifest.permission.CAMERA},5);
-//                //checkPermission();
-//                ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+//        btnLokasi.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getLocation();
 //            }
-//        }
-
-        btnLokasi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getLocation();
-            }
-        });
+//        });
     }
     
     public void getLocation() {
         try {
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 5, this);
         }
         catch(SecurityException e) {
             e.printStackTrace();
@@ -206,10 +202,6 @@ public class UploadFragment extends Fragment implements LocationListener {
                 super.onPostExecute(string1);
                 progressDialog.dismiss();
                 Toast.makeText(getActivity(),string1,Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getActivity(),"Berhasil",Toast.LENGTH_LONG).show();
-//                Intent back = new Intent(getActivity(), getContext());
-//                startActivity(back);
-//                finish();
             }
 
             @Override
@@ -220,6 +212,8 @@ public class UploadFragment extends Fragment implements LocationListener {
                 HashMap<String,String> HashMapParams = new HashMap<String,String>();
 
                 HashMapParams.put(lokasi, GetLokasi);
+                HashMapParams.put(latitude, GetLatitude);
+                HashMapParams.put(longitude, GetLongitude);
                 HashMapParams.put(caption, GetCaption);
                 HashMapParams.put(ImageName, ConvertImage);
 
@@ -238,16 +232,19 @@ public class UploadFragment extends Fragment implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        inputLokasi.setText("Latitude: " + location.getLatitude() + "\n Longitude: " + location.getLongitude());
+//        inputLokasi.setText("Latitude: " + location.getLatitude() + "\n Longitude: " + location.getLongitude());
+        inputLatitude.setText(inputLatitude.getText().toString() + location.getLatitude());
+        inputLongitude.setText(inputLongitude.getText().toString() + location.getLongitude());
 
         try {
             Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            inputLokasi.setText(inputLokasi.getText().toString() + "\n"+addresses.get(0).getAddressLine(0)+", "+
-                    addresses.get(0).getAddressLine(1)+", "+addresses.get(0).getAddressLine(2));
+//            inputLokasi.setText(inputLokasi.getText().toString() + addresses.get(0).getAddressLine(0)+", "+
+//                    addresses.get(0).getAddressLine(1)+", "+addresses.get(0).getAddressLine(2));
+            inputLokasi.setText(inputLokasi.getText().toString() + addresses.get(0).getAddressLine(0));
         }catch(Exception e)
         {
-
+            Toast.makeText(getContext(), "Gagal Mendapatkan Lokasi", Toast.LENGTH_LONG).show();
         }
 
     }
