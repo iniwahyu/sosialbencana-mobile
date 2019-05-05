@@ -3,15 +3,15 @@ package com.example.wmc.recycleritem;
 public class HomeItem {
 
     private String idpost;
-    private String username;
+    private String userkode;
     private String lokasi;
     private String gambar;
     private String caption;
     private String tanggal;
 
-    public HomeItem(String idpost, String username, String lokasi, String gambar, String caption, String tanggal) {
+    public HomeItem(String idpost, String userkode, String lokasi, String gambar, String caption, String tanggal) {
         this.idpost = idpost;
-        this.username = username;
+        this.userkode = userkode;
         this.lokasi = lokasi;
         this.gambar = gambar;
         this.caption = caption;
@@ -22,8 +22,8 @@ public class HomeItem {
         return idpost;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserkode() {
+        return userkode;
     }
 
     public String getLokasi() {

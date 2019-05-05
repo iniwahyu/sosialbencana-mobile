@@ -35,9 +35,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wmc.R;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -67,13 +64,12 @@ public class UploadFragment extends Fragment implements LocationListener {
 
     Button GetImageFromGalleryButton, UploadImageOnServerButton;
     ImageView ShowSelectedImage;
-    // EDIT TEXT
-    EditText inputCaption;
     // APALAH
     String GetLokasi;
     String GetCaption;
     String GetLatitude;
     String GetLongitude;
+    String GetUserkode;
     Bitmap FixBitmap;
     ProgressDialog progressDialog;
     ByteArrayOutputStream byteArrayOutputStream;
@@ -91,16 +87,16 @@ public class UploadFragment extends Fragment implements LocationListener {
     private ContentResolver contentResolver;
 
     // INPUT POST NAME DI PHP
-    String lokasi = "lokasi";
-    String latitude = "latitude";
-    String longitude = "longitude";
-    String caption = "caption";
-    String ImageTag = "image_tag";
-    String ImageName = "image_data";
+    String ImageName             = "image_data";
+    String lokasi               = "lokasi";
+    String latitude             = "latitude";
+    String longitude            = "longitude";
+    String caption              = "caption";
+    String userkode             = "user_kode";
 
     // COBA
     private Button btnLokasi;
-    private EditText inputLokasi, inputLatitude, inputLongitude;
+    private EditText inputLokasi, inputLatitude, inputLongitude, inputCaption, inputUserkode;
 
     LocationManager locationManager;
 
@@ -113,20 +109,26 @@ public class UploadFragment extends Fragment implements LocationListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        takePhotoFromCamera();
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA}, 1);
+        }
+        else
+        {
+            takePhotoFromCamera();
+        }
         View view = inflater.inflate(R.layout.fragment_upload, container, false);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        btnLokasi = (Button)view.findViewById(R.id.buttonLokasi);
         inputLokasi = (EditText) view.findViewById(R.id.inputLokasi);
         inputLokasi.setEnabled(false);
         inputLatitude = (EditText) view.findViewById(R.id.inputLatitude);
         inputLatitude.setEnabled(false);
         inputLongitude = (EditText) view.findViewById(R.id.inputLongitude);
         inputLongitude.setEnabled(false);
+        inputUserkode = (EditText) view.findViewById(R.id.inputUserkode);
         UploadImageOnServerButton = (Button) view.findViewById(R.id.buttonUpload);
 
         ShowSelectedImage = (ImageView) view.findViewById(R.id.imageView);
@@ -139,22 +141,17 @@ public class UploadFragment extends Fragment implements LocationListener {
         UploadImageOnServerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GetLokasi = inputLokasi.getText().toString();
-                GetLatitude = inputLatitude.getText().toString();
-                GetLongitude = inputLongitude.getText().toString();
-                GetCaption = inputCaption.getText().toString();
+                GetLokasi           = inputLokasi.getText().toString();
+                GetLatitude         = inputLatitude.getText().toString();
+                GetLongitude        = inputLongitude.getText().toString();
+                GetCaption          = inputCaption.getText().toString();
+                GetUserkode         = inputUserkode.getText().toString();
 
                 UploadImageToServer();
             }
         });
         getLocation();
 
-//        btnLokasi.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getLocation();
-//            }
-//        });
     }
     
     public void getLocation() {
@@ -170,6 +167,7 @@ public class UploadFragment extends Fragment implements LocationListener {
     private void takePhotoFromCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMERA);
+//        getActivity().finish();
     }
 
     @Override
@@ -185,7 +183,7 @@ public class UploadFragment extends Fragment implements LocationListener {
 
     public void UploadImageToServer(){
 
-        FixBitmap.compress(Bitmap.CompressFormat.JPEG, 40, byteArrayOutputStream);
+        FixBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byteArray = byteArrayOutputStream.toByteArray();
         ConvertImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
@@ -215,9 +213,10 @@ public class UploadFragment extends Fragment implements LocationListener {
                 HashMapParams.put(latitude, GetLatitude);
                 HashMapParams.put(longitude, GetLongitude);
                 HashMapParams.put(caption, GetCaption);
+                HashMapParams.put(userkode, GetUserkode);
                 HashMapParams.put(ImageName, ConvertImage);
 
-                String FinalData = imageProcessClass.ImageHttpRequest("http://dinusheroes.com/sosialbencana/api_admin/posting", HashMapParams);
+                String FinalData = imageProcessClass.ImageHttpRequest("http://dinusheroes.com/sosialbencana/api_relawan/posting", HashMapParams);
 
                 return FinalData;
             }
@@ -226,13 +225,12 @@ public class UploadFragment extends Fragment implements LocationListener {
         AsyncTaskUploadClassOBJ.execute();
     }
 
-    public ContentResolver getContentResolver() {
-        return contentResolver;
-    }
+//    public ContentResolver getContentResolver() {
+//        return contentResolver;
+//    }
 
     @Override
     public void onLocationChanged(Location location) {
-//        inputLokasi.setText("Latitude: " + location.getLatitude() + "\n Longitude: " + location.getLongitude());
         inputLatitude.setText(inputLatitude.getText().toString() + location.getLatitude());
         inputLongitude.setText(inputLongitude.getText().toString() + location.getLongitude());
 

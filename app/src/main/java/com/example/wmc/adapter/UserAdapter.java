@@ -35,7 +35,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final HomeItem listItem = listItems.get(position);
-        holder.postUsername.setText(listItem.getUsername());
+        holder.postUserkode.setText(listItem.getUserkode());
         holder.postLokasi.setText(listItem.getLokasi());
         Picasso.get().load(listItem.getGambar()).into(holder.postGambar);
         holder.postCaption.setText(listItem.getCaption());
@@ -63,7 +63,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView postUsername;
+        public TextView postUserkode;
         public TextView postLokasi;
         public ImageView postGambar;
         public TextView postCaption;
@@ -71,7 +71,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            postUsername = (TextView)itemView.findViewById(R.id.postUsername);
+            postUserkode = (TextView)itemView.findViewById(R.id.postUserkode);
             postLokasi = (TextView)itemView.findViewById(R.id.postLokasi);
             postGambar = (ImageView)itemView.findViewById(R.id.postGambar);
             postCaption = (TextView)itemView.findViewById(R.id.postCaption);

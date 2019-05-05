@@ -39,7 +39,7 @@ public class ProfilFragment extends Fragment {
 
     public String nama = "Wahyu Rizky";
     public String username = "iniwahyu";
-    private final String URL_DATA = "http://dinusheroes.com/sosialbencana/api_admin/userposting/"+username;
+    private final String URL_DATA = "http://dinusheroes.com/sosialbencana/api_relawan/postrelawan/"+username;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -61,7 +61,7 @@ public class ProfilFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profil, container, false);
         recyclerView = view.findViewById(R.id.konten);
-        recyclerView.setHasFixedSize(true);
+//        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         teksNama = (TextView)view.findViewById(R.id.teksNama);
         teksNama.setText(nama);
@@ -92,9 +92,9 @@ public class ProfilFragment extends Fragment {
                         JSONObject data = array.getJSONObject(i);
                         ProfilItem item = new ProfilItem(
                                 data.getString("id_post"),
-                                data.getString("username"),
+                                data.getString("user_kode"),
                                 data.getString("lokasi"),
-                                data.getString("nama_img"),
+                                data.getString("api_img"),
                                 data.getString("caption"),
                                 data.getString("tanggal")
                         );
@@ -103,8 +103,8 @@ public class ProfilFragment extends Fragment {
                     adapter = new ProfilAdapter(listItems, getContext());
                     recyclerView.setAdapter(adapter);
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Postingan Kosong", Toast.LENGTH_LONG).show();
+                    e.getMessage().toString();
                 }
             }
         }, new Response.ErrorListener() {

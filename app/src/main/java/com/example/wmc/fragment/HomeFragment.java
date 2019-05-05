@@ -3,9 +3,14 @@ package com.example.wmc.fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -40,9 +45,9 @@ import static com.android.volley.VolleyLog.TAG;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements LocationListener {
 
-    private final String URL_DATA = "http://dinusheroes.com/sosialbencana/api/post_api";
+    private final String URL_DATA = "http://dinusheroes.com/sosialbencana/api_relawan/post";
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -57,11 +62,9 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        isLocationEnabled(getContext());
         if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.CAMERA},5);
-            }
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = view.findViewById(R.id.konten);
@@ -92,9 +95,9 @@ public class HomeFragment extends Fragment {
                         JSONObject data = array.getJSONObject(i);
                         HomeItem item = new HomeItem(
                                 data.getString("id_post"),
-                                data.getString("username"),
+                                data.getString("user_kode"),
                                 data.getString("lokasi"),
-                                data.getString("nama_img"),
+                                data.getString("api_img"),
                                 data.getString("caption"),
                                 data.getString("tanggal")
                         );
@@ -104,7 +107,6 @@ public class HomeFragment extends Fragment {
                     recyclerView.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    //Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     Log.e(TAG, "Error while reading marker from response", e);
                 }
             }
@@ -120,5 +122,38 @@ public class HomeFragment extends Fragment {
         antrian.add(stringRequest);
     }
 
+    public static Boolean isLocationEnabled(Context context)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            // This is new method provided in API 28
+            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            return lm.isLocationEnabled();
+        } else {
+            // This is Deprecated in API 28
+            int mode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE,
+                    Settings.Secure.LOCATION_MODE_OFF);
+            return  (mode != Settings.Secure.LOCATION_MODE_OFF);
+        }
+    }
 
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        Toast.makeText(getContext(), "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show();
+    }
 }

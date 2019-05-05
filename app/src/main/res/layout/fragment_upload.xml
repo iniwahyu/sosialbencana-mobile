@@ -6,81 +6,95 @@
     tools:context=".fragment.UploadFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/buttonLokasi"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="GET LOCATION"
-            android:background="@color/md_green_600"
-            android:layout_margin="10dp"/>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:id="@+id/imageView"/>
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/md_black_1000"
-            android:text="Lokasi" />
+            android:orientation="vertical"
+            android:padding="10dp">
 
-        <EditText
-            android:id="@+id/inputLokasi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="none"
-            android:hint="Lokasi" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:id="@+id/imageView"/>
 
-        <EditText
-            android:id="@+id/inputLatitude"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="none"
-            android:hint="Latitude" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/md_black_1000"
+                android:text="Lokasi" />
 
-        <EditText
-            android:id="@+id/inputLongitude"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="none"
-            android:hint="Longitude" />
+            <EditText
+                android:id="@+id/inputLokasi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="none"
+                android:hint="Lokasi" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/md_black_1000"
-            android:text="Deskripsi" />
+            <EditText
+                android:id="@+id/inputLatitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="none"
+                android:hint="Latitude" />
 
-        <EditText
-            android:id="@+id/inputCaption"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textCapSentences"
-            android:hint="Deskripsi" />
+            <EditText
+                android:id="@+id/inputLongitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="none"
+                android:hint="Longitude" />
 
-        <Button
-            android:id="@+id/buttonUpload"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            android:background="#ff4500"
-            android:textColor="@color/md_black_1000"
-            android:text="Upload"
-            android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/md_black_1000"
+                android:text="Deskripsi" />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/inputCaption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textCapSentences"
+                android:hint="Deskripsi" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/md_black_1000"
+                android:text="Userkode" />
+
+            <EditText
+                android:id="@+id/inputUserkode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textCapSentences"
+                android:hint="Userkode" />
+
+            <Button
+                android:id="@+id/buttonUpload"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:background="#ff4500"
+                android:text="Upload"
+                android:textColor="@color/md_black_1000"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
 
 </FrameLayout>
