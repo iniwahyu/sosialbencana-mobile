@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wmc.Konfigurasi;
 import com.example.wmc.recycleritem.HomeItem;
 import com.example.wmc.R;
 import com.example.wmc.adapter.UserAdapter;
@@ -47,7 +48,7 @@ import static com.android.volley.VolleyLog.TAG;
  */
 public class HomeFragment extends Fragment implements LocationListener {
 
-    private final String URL_DATA = "http://dinusheroes.com/sosialbencana/api_relawan/post";
+    private final String URL_DATA = Konfigurasi.DATA_POSTRELAWAN;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -62,7 +63,6 @@ public class HomeFragment extends Fragment implements LocationListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        isLocationEnabled(getContext());
         if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
@@ -121,21 +121,6 @@ public class HomeFragment extends Fragment implements LocationListener {
         RequestQueue antrian = Volley.newRequestQueue(requireContext());
         antrian.add(stringRequest);
     }
-
-    public static Boolean isLocationEnabled(Context context)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            // This is new method provided in API 28
-            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            return lm.isLocationEnabled();
-        } else {
-            // This is Deprecated in API 28
-            int mode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE,
-                    Settings.Secure.LOCATION_MODE_OFF);
-            return  (mode != Settings.Secure.LOCATION_MODE_OFF);
-        }
-    }
-
 
     @Override
     public void onLocationChanged(Location location) {

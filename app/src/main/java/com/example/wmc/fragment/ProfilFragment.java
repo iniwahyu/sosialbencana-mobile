@@ -1,7 +1,10 @@
 package com.example.wmc.fragment;
 
-
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,10 +22,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wmc.Konfigurasi;
+import com.example.wmc.ProfilRelawan;
 import com.example.wmc.R;
 import com.example.wmc.adapter.ProfilAdapter;
-import com.example.wmc.adapter.UserAdapter;
-import com.example.wmc.recycleritem.HomeItem;
 import com.example.wmc.recycleritem.ProfilItem;
 
 import org.json.JSONArray;
@@ -31,15 +35,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ProfilFragment extends Fragment {
-
-    public String nama = "Wahyu Rizky";
-    public String username = "iniwahyu";
-    private final String URL_DATA = "http://dinusheroes.com/sosialbencana/api_relawan/postrelawan/"+username;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -49,6 +45,8 @@ public class ProfilFragment extends Fragment {
     // PROFIL ATAS
     public TextView teksNama;
     public TextView teksUsername;
+
+    private Button btnEdit;
 
     public ProfilFragment() {
         // Required empty public constructor
@@ -61,12 +59,25 @@ public class ProfilFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profil, container, false);
         recyclerView = view.findViewById(R.id.konten);
-//        recyclerView.setHasFixedSize(true);
+        //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        teksNama = (TextView)view.findViewById(R.id.teksNama);
+
+        SharedPreferences profil = this.getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        final String user = profil.getString("User", "");
+        final String nama = "Wahyu Rizky";
+
+        teksNama = view.findViewById(R.id.teksNama);
         teksNama.setText(nama);
-        teksUsername = (TextView)view.findViewById(R.id.teksUsername);
-        teksUsername.setText(username);
+        teksUsername = view.findViewById(R.id.teksUsername);
+        teksUsername.setText(user);
+        btnEdit = view.findViewById(R.id.btnEdit);
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ProfilRelawan.class);
+                startActivity(intent);
+            }
+        });
 
         listItems = new ArrayList<>();
 
@@ -79,6 +90,10 @@ public class ProfilFragment extends Fragment {
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Memuat Data...");
         progressDialog.show();
+
+        SharedPreferences profil = this.getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        final String user = profil.getString("User", "");
+        final String URL_DATA = Konfigurasi.DATA_BYRELAWAN+user;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_DATA, new Response.Listener<String>() {
             @Override
@@ -103,8 +118,7 @@ public class ProfilFragment extends Fragment {
                     adapter = new ProfilAdapter(listItems, getContext());
                     recyclerView.setAdapter(adapter);
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "Postingan Kosong", Toast.LENGTH_LONG).show();
-                    e.getMessage().toString();
+                    alertData();
                 }
             }
         }, new Response.ErrorListener() {
@@ -117,6 +131,14 @@ public class ProfilFragment extends Fragment {
 
         RequestQueue antrian = Volley.newRequestQueue(requireContext());
         antrian.add(stringRequest);
+    }
+
+    private void alertData(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Data Tidak Ditemukan")
+                .setTitle("Peringatan!");
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 }

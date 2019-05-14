@@ -2,8 +2,8 @@ package com.example.wmc.fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
@@ -14,32 +14,26 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wmc.Konfigurasi;
 import com.example.wmc.R;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -54,7 +48,6 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import static android.support.v4.content.ContextCompat.getSystemService;
 
 
 /**
@@ -62,7 +55,7 @@ import static android.support.v4.content.ContextCompat.getSystemService;
  */
 public class UploadFragment extends Fragment implements LocationListener {
 
-    Button GetImageFromGalleryButton, UploadImageOnServerButton;
+    Button UploadImageOnServerButton;
     ImageView ShowSelectedImage;
     // APALAH
     String GetLokasi;
@@ -83,8 +76,7 @@ public class UploadFragment extends Fragment implements LocationListener {
     BufferedReader bufferedReader;
     StringBuilder stringBuilder;
     boolean check = true;
-    private int GALLERY = 1, CAMERA = 2;
-    private ContentResolver contentResolver;
+    private int CAMERA = 2;
 
     // INPUT POST NAME DI PHP
     String ImageName             = "image_data";
@@ -94,9 +86,8 @@ public class UploadFragment extends Fragment implements LocationListener {
     String caption              = "caption";
     String userkode             = "user_kode";
 
-    // COBA
-    private Button btnLokasi;
-    private EditText inputLokasi, inputLatitude, inputLongitude, inputCaption, inputUserkode;
+    // EDIT TEXT
+    private EditText inputLokasi, inputLatitude, inputLongitude, inputCaption;
 
     LocationManager locationManager;
 
@@ -122,19 +113,20 @@ public class UploadFragment extends Fragment implements LocationListener {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        inputLokasi = (EditText) view.findViewById(R.id.inputLokasi);
+        inputLokasi = view.findViewById(R.id.inputLokasi);
         inputLokasi.setEnabled(false);
-        inputLatitude = (EditText) view.findViewById(R.id.inputLatitude);
+        inputLatitude = view.findViewById(R.id.inputLatitude);
         inputLatitude.setEnabled(false);
-        inputLongitude = (EditText) view.findViewById(R.id.inputLongitude);
+        inputLongitude = view.findViewById(R.id.inputLongitude);
         inputLongitude.setEnabled(false);
-        inputUserkode = (EditText) view.findViewById(R.id.inputUserkode);
-        UploadImageOnServerButton = (Button) view.findViewById(R.id.buttonUpload);
 
-        ShowSelectedImage = (ImageView) view.findViewById(R.id.imageView);
+        SharedPreferences prefs = this.getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        final String user = prefs.getString("User", "");
 
-        inputLokasi = (EditText) view.findViewById(R.id.inputLokasi);
-        inputCaption = (EditText) view.findViewById(R.id.inputCaption);
+        UploadImageOnServerButton = view.findViewById(R.id.buttonUpload);
+        ShowSelectedImage = view.findViewById(R.id.imageView);
+        inputLokasi = view.findViewById(R.id.inputLokasi);
+        inputCaption = view.findViewById(R.id.inputCaption);
 
         byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -145,7 +137,7 @@ public class UploadFragment extends Fragment implements LocationListener {
                 GetLatitude         = inputLatitude.getText().toString();
                 GetLongitude        = inputLongitude.getText().toString();
                 GetCaption          = inputCaption.getText().toString();
-                GetUserkode         = inputUserkode.getText().toString();
+                GetUserkode         = user;
 
                 UploadImageToServer();
             }
@@ -157,7 +149,7 @@ public class UploadFragment extends Fragment implements LocationListener {
     public void getLocation() {
         try {
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 5, this);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 100, this);
         }
         catch(SecurityException e) {
             e.printStackTrace();
@@ -167,7 +159,6 @@ public class UploadFragment extends Fragment implements LocationListener {
     private void takePhotoFromCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMERA);
-//        getActivity().finish();
     }
 
     @Override
@@ -216,7 +207,7 @@ public class UploadFragment extends Fragment implements LocationListener {
                 HashMapParams.put(userkode, GetUserkode);
                 HashMapParams.put(ImageName, ConvertImage);
 
-                String FinalData = imageProcessClass.ImageHttpRequest("http://dinusheroes.com/sosialbencana/api_relawan/posting", HashMapParams);
+                String FinalData = imageProcessClass.ImageHttpRequest(Konfigurasi.ADD_POST, HashMapParams);
 
                 return FinalData;
             }
@@ -224,10 +215,6 @@ public class UploadFragment extends Fragment implements LocationListener {
         AsyncTaskUploadClass AsyncTaskUploadClassOBJ = new AsyncTaskUploadClass();
         AsyncTaskUploadClassOBJ.execute();
     }
-
-//    public ContentResolver getContentResolver() {
-//        return contentResolver;
-//    }
 
     @Override
     public void onLocationChanged(Location location) {

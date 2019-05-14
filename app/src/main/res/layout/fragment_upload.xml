@@ -67,21 +67,6 @@
                 android:inputType="textCapSentences"
                 android:hint="Deskripsi" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/md_black_1000"
-                android:text="Userkode" />
-
-            <EditText
-                android:id="@+id/inputUserkode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="textCapSentences"
-                android:hint="Userkode" />
-
             <Button
                 android:id="@+id/buttonUpload"
                 android:layout_width="match_parent"

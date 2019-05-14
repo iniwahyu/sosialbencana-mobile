@@ -7,8 +7,10 @@
         android:topLeftRadius="50dp"
         android:topRightRadius="50dp" />
 
-    <solid
-        android:color="@color/md_blue_600"
-        ></solid>
+    <gradient
+        android:type="linear"
+        android:angle="0"
+        android:startColor="#e91e63"
+        android:endColor="#ef5350" />
 
 </shape>

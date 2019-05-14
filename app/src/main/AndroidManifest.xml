@@ -18,11 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_bottom_menu"></activity>
-        <activity android:name=".Profil" />
-        <activity android:name=".BottomMenu">
+        <activity android:name=".ProfilRelawan"></activity>
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -30,6 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".BottomMenu" />
         <activity android:name=".Register" />
         <activity android:name=".Login" />
     </application>
