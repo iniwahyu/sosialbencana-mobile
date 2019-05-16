@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
@@ -15,11 +16,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -29,7 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wmc.adapter.UserAdapter;
-import com.example.wmc.recycleritem.HomeItem;
+import com.example.wmc.recycleritem.UserItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,12 +45,23 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
 
-    private List<HomeItem> listItems;
+    private List<UserItem> listItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences profil = getSharedPreferences("Login", Context.MODE_PRIVATE);
+        final String username = profil.getString("User", "");
+        final String sesi = profil.getString("Sesi", "");
+        if(sesi.contains("Sesi")) {
+            Intent intent = new Intent(MainActivity.this, BottomMenu.class);
+            startActivity(intent);
+            finish();
+        }
+
         statusCheck();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkAndRequestPermissions()) {
@@ -70,26 +81,19 @@ public class MainActivity extends AppCompatActivity {
 
     // MENAMPILKAN DATA
     private void loadData() {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Memuat Data...");
-        progressDialog.show();
-
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_DATA, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                progressDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray array = jsonObject.getJSONArray("result");
 
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject data = array.getJSONObject(i);
-                        HomeItem item = new HomeItem(
-                                data.getString("id_post"),
-                                data.getString("user_kode"),
-                                data.getString("lokasi"),
-                                data.getString("api_img"),
+                        UserItem item = new UserItem(
+                                data.getString("slug_post"),
                                 data.getString("caption"),
+                                data.getString("lokasi"),
                                 data.getString("tanggal")
                         );
                         listItems.add(item);
@@ -97,19 +101,26 @@ public class MainActivity extends AppCompatActivity {
                     adapter = new UserAdapter(listItems, getApplicationContext());
                     recyclerView.setAdapter(adapter);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Tidak Ada", Toast.LENGTH_LONG).show();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
         RequestQueue antrian = Volley.newRequestQueue(this);
         antrian.add(stringRequest);
+    }
+
+    private void alertData(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setMessage("Data Tidak Ditemukan")
+                .setTitle("Peringatan!");
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     // MENAMPILKAN MENU DAN ITEM MENU
@@ -123,16 +134,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.login:
-                Intent login = new Intent(getApplicationContext(), Login.class);
-                startActivity(login);
-                finish();
-                return true;
-            case R.id.register:
-                Intent register = new Intent(getApplicationContext(), Register.class);
-                startActivity(register);
-                finish();
-                return true;
             case R.id.refresh:
                 Intent refresh = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(refresh);
@@ -165,26 +166,6 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
-    // MENAHAN KEMBALI
-    boolean doubleBackToExitPressedOnce = false;
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Tekan Dua Kali Untuk Keluar", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce=false;
-            }
-        }, 2000);
-    }
 
     // PERMISSION
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;

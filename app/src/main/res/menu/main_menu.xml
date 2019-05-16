@@ -3,17 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/login"
-        android:title="Login"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/register"
-        android:title="Register"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/refresh"
+        android:icon="@drawable/icon_refresh"
         android:title="Refresh"
         app:showAsAction="always" />
 </menu>

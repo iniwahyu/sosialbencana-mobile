@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +23,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wmc.BottomMenu;
 import com.example.wmc.Konfigurasi;
+import com.example.wmc.MainActivity;
 import com.example.wmc.ProfilRelawan;
 import com.example.wmc.R;
 import com.example.wmc.adapter.ProfilAdapter;
@@ -43,15 +46,13 @@ public class ProfilFragment extends Fragment {
     private List<ProfilItem> listItems;
 
     // PROFIL ATAS
-    public TextView teksNama;
     public TextView teksUsername;
 
-    private Button btnEdit;
+    private Button btnEdit, btnLogout;
 
     public ProfilFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,15 +60,12 @@ public class ProfilFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profil, container, false);
         recyclerView = view.findViewById(R.id.konten);
-        //recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
         SharedPreferences profil = this.getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
         final String user = profil.getString("User", "");
-        final String nama = "Wahyu Rizky";
 
-        teksNama = view.findViewById(R.id.teksNama);
-        teksNama.setText(nama);
         teksUsername = view.findViewById(R.id.teksUsername);
         teksUsername.setText(user);
         btnEdit = view.findViewById(R.id.btnEdit);
@@ -76,6 +74,20 @@ public class ProfilFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ProfilRelawan.class);
                 startActivity(intent);
+            }
+        });
+        btnLogout = view.findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Berhasil Keluar", Toast.LENGTH_LONG).show();
+                SharedPreferences editor = PreferenceManager.getDefaultSharedPreferences(getContext());
+                SharedPreferences.Editor hai = editor.edit();
+                hai.remove("Sesi");
+                hai.clear();
+                hai.commit();
+                Intent keluar = new Intent(getActivity(), MainActivity.class);
+                startActivity(keluar);
             }
         });
 
@@ -125,7 +137,7 @@ public class ProfilFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                alertData();
             }
         });
 

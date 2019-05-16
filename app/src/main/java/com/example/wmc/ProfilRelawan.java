@@ -79,12 +79,13 @@ public class ProfilRelawan extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONObject jsonPost = new JSONObject(response);
-                    inputNama.setText(jsonPost.getString("nama").toString());
-                    inputEmail.setText(jsonPost.getString("email").toString());
-                    inputTgllahir.setText(jsonPost.getString("tgl_lahir").toString());
-                    inputPhone.setText(jsonPost.getString("phone").toString());
+                    inputNama.setText(jsonPost.getString("nama"));
+                    inputEmail.setText(jsonPost.getString("email"));
+                    inputTgllahir.setText(jsonPost.getString("tgl_lahir"));
+                    inputPhone.setText(jsonPost.getString("phone"));
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    e.getMessage();
                 }
             }
         }, new Response.ErrorListener() {

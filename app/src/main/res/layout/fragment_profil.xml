@@ -31,17 +31,6 @@
                 >
 
                 <TextView
-                    android:id="@+id/teksNama"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/md_white_1000"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:padding="5dp"
-                    android:text="Nama Relawan"
-                    />
-
-                <TextView
                     android:id="@+id/teksUsername"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -56,11 +45,22 @@
                     android:layout_height="wrap_content"
                     android:background="@color/md_white_1000"
                     android:padding="5dp"
-                    android:layout_margin="15dp"
+                    android:layout_margin="0dp"
                     android:textSize="12sp"
                     android:minHeight="0dp"
                     android:text="Edit Profile"
                     />
+
+                <Button
+                    android:id="@+id/btnLogout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/md_red_500"
+                    android:padding="5dp"
+                    android:layout_margin="15dp"
+                    android:textSize="12sp"
+                    android:minHeight="0dp"
+                    android:text="Logout" />
 
             </LinearLayout>
 

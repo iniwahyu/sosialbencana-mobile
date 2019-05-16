@@ -3,14 +3,10 @@ package com.example.wmc.fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -31,7 +27,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.wmc.Konfigurasi;
 import com.example.wmc.recycleritem.HomeItem;
 import com.example.wmc.R;
-import com.example.wmc.adapter.UserAdapter;
+import com.example.wmc.adapter.RelawanAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -103,7 +99,7 @@ public class HomeFragment extends Fragment implements LocationListener {
                         );
                         listItems.add(item);
                     }
-                    adapter = new UserAdapter(listItems, getContext());
+                    adapter = new RelawanAdapter(listItems, getContext());
                     recyclerView.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
