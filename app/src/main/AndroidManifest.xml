@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".DetailUserPost"></activity>
+        <activity android:name=".DeletePost"></activity>
+        <activity android:name=".DetailUserPost" />
         <activity android:name=".MainActivity" />
         <activity android:name=".ProfilRelawan" />
         <activity android:name=".HomeActivity">

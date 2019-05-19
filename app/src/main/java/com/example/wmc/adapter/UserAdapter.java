@@ -50,11 +50,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
                 pindah.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 pindah.putExtra("Slug", listItem.getSlug());
                 pindah.putExtra("Caption", listItem.getCaption());
-//                pindah.putExtra("Kode", listItem.getKode());
-//                pindah.putExtra("Image", listItem.getGambar());
-//                pindah.putExtra("Judul", listItem.getJudul());
-//                pindah.putExtra("Jumlah", listItem.getJumlah());
-//                pindah.putExtra("Harga", listItem.getHarga());
                 context.startActivity(pindah);
             }
         });

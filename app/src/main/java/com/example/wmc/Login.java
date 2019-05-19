@@ -47,6 +47,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().hide();
         
         txtUserkode = findViewById(R.id.txtUserkode);
         txtPassword = findViewById(R.id.txtPassword);
@@ -88,7 +89,7 @@ public class Login extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Kode Relawan/Password Salah", Toast.LENGTH_LONG).show();
+                    checkLogin();
                 }
             }
         }, new Response.ErrorListener() {
@@ -105,5 +106,13 @@ public class Login extends AppCompatActivity {
             }
         };
         Volley.newRequestQueue(this).add(stringRequest);
+    }
+
+    private void checkLogin(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Login.this, android.R.style.Theme_Material_Light_Dialog_Alert);
+        builder.setTitle("Maaf!")
+                .setMessage("Kode Relawan/Pasword Salah");
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

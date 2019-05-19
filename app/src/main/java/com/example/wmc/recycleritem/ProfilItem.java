@@ -2,15 +2,15 @@ package com.example.wmc.recycleritem;
 
 public class ProfilItem {
 
-    private String idpost;
+    private String slug;
     private String username;
     private String lokasi;
     private String gambar;
     private String caption;
     private String tanggal;
 
-    public ProfilItem(String idpost, String username, String lokasi, String gambar, String caption, String tanggal) {
-        this.idpost = idpost;
+    public ProfilItem(String slug, String username, String lokasi, String gambar, String caption, String tanggal) {
+        this.slug = slug;
         this.username = username;
         this.lokasi = lokasi;
         this.gambar = gambar;
@@ -18,8 +18,8 @@ public class ProfilItem {
         this.tanggal = tanggal;
     }
 
-    public String getIdpost() {
-        return idpost;
+    public String getSlug() {
+        return slug;
     }
 
     public String getUsername() {

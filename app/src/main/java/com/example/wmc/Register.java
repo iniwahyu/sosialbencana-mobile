@@ -28,6 +28,7 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        getSupportActionBar().hide();
 
         btnDaftar = findViewById(R.id.btnDaftar);
         inputUserkode = findViewById(R.id.inputUserkode);

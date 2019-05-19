@@ -15,6 +15,9 @@ public class Konfigurasi {
     // EDIT DATA
     public static final String EDIT_RELAWAN = "https://dinusheroes.com/sosialbencana/api_relawan/detail/";
 
+    // DELETE DATA
+    public static final String DELETE_POST = "https://dinusheroes.com/sosialbencana/api_relawan/delete_posting/";
+
     // LOGIN
     public static final String LOGIN = "https://dinusheroes.com/sosialbencana/api_auth/proseslogin";
 }

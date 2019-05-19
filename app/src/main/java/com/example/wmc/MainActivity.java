@@ -101,13 +101,13 @@ public class MainActivity extends AppCompatActivity {
                     adapter = new UserAdapter(listItems, getApplicationContext());
                     recyclerView.setAdapter(adapter);
                 } catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), "Tidak Ada", Toast.LENGTH_LONG).show();
+                    alertData();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                alertData();
             }
         });
 
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void alertData(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setMessage("Data Tidak Ditemukan")
                 .setTitle("Peringatan!");
         AlertDialog alert = builder.create();
@@ -165,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
         final AlertDialog alert = builder.create();
         alert.show();
     }
-
 
     // PERMISSION
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;

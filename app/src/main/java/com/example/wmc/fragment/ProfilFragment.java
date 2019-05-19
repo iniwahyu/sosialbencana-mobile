@@ -118,7 +118,7 @@ public class ProfilFragment extends Fragment {
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject data = array.getJSONObject(i);
                         ProfilItem item = new ProfilItem(
-                                data.getString("id_post"),
+                                data.getString("slug_post"),
                                 data.getString("user_kode"),
                                 data.getString("lokasi"),
                                 data.getString("api_img"),

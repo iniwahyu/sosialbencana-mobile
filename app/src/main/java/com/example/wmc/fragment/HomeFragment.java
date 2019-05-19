@@ -2,6 +2,7 @@ package com.example.wmc.fragment;
 
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -102,20 +103,27 @@ public class HomeFragment extends Fragment implements LocationListener {
                     adapter = new RelawanAdapter(listItems, getContext());
                     recyclerView.setAdapter(adapter);
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "Error while reading marker from response", e);
+                    alertData();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                alertData();
             }
         });
 
         RequestQueue antrian = Volley.newRequestQueue(requireContext());
         antrian.add(stringRequest);
+    }
+
+    private void alertData(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Peringatan!")
+                .setMessage("Data Tidak Ditemukan");
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override

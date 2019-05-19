@@ -27,6 +27,13 @@
             android:padding="5dp" >
 
             <TextView
+                android:id="@+id/postSlug"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:textSize="8sp"
+                android:text="Lokasi" />
+
+            <TextView
                 android:id="@+id/postLokasi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
