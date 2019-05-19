@@ -33,7 +33,7 @@ import java.util.HashMap;
 
 public class ProfilRelawan extends AppCompatActivity {
 
-    private EditText inputNama, inputEmail, inputTgllahir, inputPhone;
+    private EditText inputUserkode, inputNama, inputEmail, inputTgllahir, inputJkel, inputPhone;
     private Button btnSimpan;
     private TextView txtUser;
 
@@ -42,13 +42,15 @@ public class ProfilRelawan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profil_relawan);
 
+        inputUserkode       = findViewById(R.id.inputUserkode);
+        inputUserkode.setVisibility(View.GONE);
         inputNama           = findViewById(R.id.inputNama);
         inputEmail          = findViewById(R.id.inputEmail);
         inputTgllahir       = findViewById(R.id.inputTgllahir);
         inputPhone          = findViewById(R.id.inputPhone);
 
         Spinner dropdown = findViewById(R.id.inputJeniskelamin);
-        String[] items = new String[]{"Laki-Laki", "Perempuan"};
+        String[] items = new String[]{"Laki Laki", "Perempuan"};
         ArrayAdapter<String> jeniskelamin = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(jeniskelamin);
 
@@ -59,6 +61,8 @@ public class ProfilRelawan extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveData();
+                Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_LONG).show();
+                onBackPressed();
             }
         });
     }
@@ -79,6 +83,7 @@ public class ProfilRelawan extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONObject jsonPost = new JSONObject(response);
+                    inputUserkode.setText(jsonPost.getString("user_kode"));
                     inputNama.setText(jsonPost.getString("nama"));
                     inputEmail.setText(jsonPost.getString("email"));
                     inputTgllahir.setText(jsonPost.getString("tgl_lahir"));
@@ -98,13 +103,18 @@ public class ProfilRelawan extends AppCompatActivity {
     }
 
     public void saveData(){
-        String nama         = "nama";
-        String email        = "email";
-        String tgl_lahir    = "tgl_lahir";
-        String phone        = "phone";
+        final String user_kode    = "user_kode";
+        final String nama         = "nama";
+        final String email        = "email";
+        final String tgl_lahir    = "tgl_lahir";
+        final String j_kel        = "j_kel";
+        final String phone        = "phone";
 
-        String GetNama      = inputNama.getText().toString().trim();
-        String GetEmail     = inputEmail.getText().toString().trim();
+        final String GetUserKode  = inputUserkode.getText().toString().trim();
+        final String GetNama      = inputNama.getText().toString().trim();
+        final String GetEmail     = inputEmail.getText().toString().trim();
+        final String GetTglLahir  = inputTgllahir.getText().toString().trim();
+        final String GetPhone     = inputPhone.getText().toString().trim();
 
         class SaveData extends AsyncTask<Void,Void,String> {
 
@@ -126,13 +136,19 @@ public class ProfilRelawan extends AppCompatActivity {
             @Override
             protected String doInBackground(Void... v) {
                 HashMap<String,String> params = new HashMap<>();
-//                params.put(user_kode, GetKode);
-//                params.put(email, GetEmail);
+                params.put(user_kode, GetUserKode);
+                params.put(nama, GetNama);
+                params.put(email, GetEmail);
+                params.put(tgl_lahir, GetTglLahir);
+                params.put(phone, GetPhone);
 
                 RequestHandler rh = new RequestHandler();
-                String res = rh.sendPostRequest(Konfigurasi.ADD_RELAWAN, params);
+                String res = rh.sendPostRequest(Konfigurasi.UPDATE_RELAWAN, params);
                 return res;
             }
         }
+
+        SaveData saveData = new SaveData();
+        saveData.execute();
     }
 }

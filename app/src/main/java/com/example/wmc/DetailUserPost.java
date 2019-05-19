@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -40,7 +42,6 @@ public class DetailUserPost extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1, GridLayoutManager.VERTICAL, false));
         listItems = new ArrayList<>();
-
         loadData();
     }
 
@@ -61,7 +62,7 @@ public class DetailUserPost extends AppCompatActivity {
                 progressDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    JSONArray array = jsonObject.getJSONArray("data");
+                    JSONArray array = jsonObject.getJSONArray("result");
 
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject data = array.getJSONObject(i);

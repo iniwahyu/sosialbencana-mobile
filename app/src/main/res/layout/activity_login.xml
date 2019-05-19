@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/button"
             android:padding="15dp"
-            android:inputType="text"
+            android:inputType="text|textCapWords"
             android:textSize="15dp"
             tools:hint="Kode Relawan" />
 

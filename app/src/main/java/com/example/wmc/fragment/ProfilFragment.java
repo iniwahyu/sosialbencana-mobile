@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +84,7 @@ public class ProfilFragment extends Fragment {
                 Toast.makeText(getActivity(), "Berhasil Keluar", Toast.LENGTH_LONG).show();
                 SharedPreferences editor = PreferenceManager.getDefaultSharedPreferences(getContext());
                 SharedPreferences.Editor hai = editor.edit();
+                hai.remove("Username");
                 hai.remove("Sesi");
                 hai.clear();
                 hai.commit();

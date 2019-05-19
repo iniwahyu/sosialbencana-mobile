@@ -50,25 +50,10 @@ public class DetailPostAdapter extends RecyclerView.Adapter<DetailPostAdapter.Vi
         holder.postWaktu.setText(listItem.getWaktu());
         holder.postUserkode.setText(listItem.getUserkode());
 
-        holder.postCaption.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent pindah = new Intent(context.getApplicationContext(), DetailItem.class);
-//                pindah.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                pindah.putExtra("Kode", listItem.getKode());
-//                pindah.putExtra("Image", listItem.getGambar());
-//                pindah.putExtra("Judul", listItem.getJudul());
-//                pindah.putExtra("Jumlah", listItem.getJumlah());
-//                pindah.putExtra("Harga", listItem.getHarga());
-//                context.startActivity(pindah);
-            }
-        });
         holder.btnKembali.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent kembali = new Intent(context.getApplicationContext(), MainActivity.class);
-                context.startActivity(kembali);
-                ((Activity)v.getContext()).finish();
+                ((Activity)context).finish();
             }
         });
     }
@@ -101,7 +86,7 @@ public class DetailPostAdapter extends RecyclerView.Adapter<DetailPostAdapter.Vi
             postTanggal = itemView.findViewById(R.id.postTanggal);
             postWaktu = itemView.findViewById(R.id.postWaktu);
             postUserkode = itemView.findViewById(R.id.postUserkode);
-            btnKembali = itemView.findViewById(R.id.btnKembali);
+            btnKembali = itemView.findViewById(R.id.btnBack);
 
             itemView.setOnClickListener(this);
         }

@@ -14,6 +14,7 @@ public class Konfigurasi {
 
     // EDIT DATA
     public static final String EDIT_RELAWAN = "https://dinusheroes.com/sosialbencana/api_relawan/detail/";
+    public static final String UPDATE_RELAWAN = "https://dinusheroes.com/sosialbencana/api_relawan/update_datadiri";
 
     // DELETE DATA
     public static final String DELETE_POST = "https://dinusheroes.com/sosialbencana/api_relawan/delete_posting/";

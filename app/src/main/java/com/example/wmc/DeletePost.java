@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class DeletePost extends AppCompatActivity {
 
     // BUTTON
-    private Button btnDelete;
+    private Button btnDelete, btnKembali;
     // EDIT TEXT
     private EditText inputSlug;
     // INPUT NAME DI PHP
@@ -29,10 +29,12 @@ public class DeletePost extends AppCompatActivity {
 
         inputSlug = findViewById(R.id.postSlug);
         btnDelete = findViewById(R.id.btnDelete);
+        btnKembali = findViewById(R.id.btnKembali);
 
         Intent dapat = getIntent();
         final String dataSlug = dapat.getExtras().getString("Slug");
         inputSlug.setText(dataSlug);
+        inputSlug.setVisibility(View.GONE);
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +48,13 @@ public class DeletePost extends AppCompatActivity {
                 Intent sukses = new Intent(DeletePost.this, BottomMenu.class);
                 startActivity(sukses);
                 finish();
+            }
+        });
+
+        btnKembali.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }

@@ -17,15 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="156dp" />
 
-        <TextView
-            android:id="@+id/postDetail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="@color/md_black_1000"
-            android:padding="5dp"
-            android:text="Informasi" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -36,11 +27,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_black_1000"
                     android:text="Caption: " />
 
                 <TextView
@@ -55,11 +48,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_black_1000"
                     android:text="Lokasi: " />
 
                 <TextView
@@ -74,11 +69,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_black_1000"
                     android:text="Latitude: " />
 
                 <TextView
@@ -93,11 +90,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_black_1000"
                     android:text="Longitude: " />
 
                 <TextView
@@ -112,11 +111,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_black_1000"
                     android:text="Tanggal: " />
 
                 <TextView
@@ -131,11 +132,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_black_1000"
                     android:text="Waktu: " />
 
                 <TextView
@@ -150,11 +153,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_black_1000"
                     android:text="Relawan: " />
 
                 <TextView
@@ -168,7 +173,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btnKembali"
+            android:id="@+id/btnBack"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/md_red_500"

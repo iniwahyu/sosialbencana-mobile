@@ -28,6 +28,13 @@
             android:paddingRight="15dp"
             android:orientation="vertical">
 
+            <EditText
+                android:id="@+id/inputUserkode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+                android:inputType="text|textCapWords" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
